@@ -17,8 +17,8 @@
   .badge{display:block;margin:0 auto 12px;border:0;outline:none}
   .badge img{display:block;height:48px;width:auto;margin:0 auto}
   .hint{display:none;margin-top:20px;padding:14px 16px;background:#152713;
-        border:1px solid #416244;border-radius:12px;font-size:14px;line-height:21px}
-  .hint b{color:#4bff60}
+        border:1px solid #416244;border-radius:12px;font-size:14px;line-height:21px;color:#fff}
+  .hint b{color:#fff}
   .alt{margin-top:22px;font-size:13px;color:#9fb09b}
   .alt a{color:#9fb09b}
 </style>
@@ -39,8 +39,8 @@
   </a>
 
   <div class="hint" id="hint">
-    The App Store won't open from inside this app's browser.<br>
-    Tap <b>&#8943;</b> at the top of the screen, choose <b>Open in browser</b>, then tap the badge again.
+    <span id="hint-where">The App Store won't open inside this app's browser.</span><br>
+    Tap <b>&#8943;</b> at the top, then choose <b>Open in browser</b>.
   </div>
 
   <p class="alt"><a href="https://www.kickoffsocialapp.co.uk">kickoffsocialapp.co.uk</a></p>
@@ -64,6 +64,14 @@
   var ua = navigator.userAgent || '';
   var isIOS = /iPad|iPhone|iPod/.test(ua);
   var isAndroid = /Android/.test(ua);
+
+  /* Name TikTok when we can actually tell it is TikTok. Naming it to someone
+     who arrived from Instagram would be confidently wrong, and an instruction
+     that describes the wrong app is worse than a vague one. */
+  if (/BytedanceWebview|musical_ly|TikTok|Trill|aweme/i.test(ua)) {
+    var w = document.getElementById('hint-where');
+    if (w) w.textContent = "The App Store won't open inside TikTok's browser.";
+  }
 
   /* Dim the store they cannot use rather than hiding it, so the page still
      reads as "both" and a wrong guess about the device is never a dead end. */
