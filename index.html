@@ -72,6 +72,22 @@
   .hero h1 .tac{color:#fff}
   .hero .lead{margin:22px auto 30px}
   p.lead.launch-line{color:#fff;text-transform:uppercase;font-weight:800;font-size:clamp(16px,2.6vw,21px);letter-spacing:.12em}
+  /* Store links. Text buttons rather than Apple and Google's official badge
+     images, because those are licensed artwork with their own sizing and clear
+     space rules, and a stretched or recoloured badge is worse than none. Swap
+     these for the real badges when you have the assets. */
+  .store-links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+  .store-btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:12px;background:#152713;border:1px solid #416244;color:#fff;font-weight:600;font-size:14px;text-decoration:none;transition:background .2s ease,border-color .2s ease}
+  .store-btn:hover{background:#1c3319;border-color:#4bff60}
+  /* Official Apple / Google badges. Used as supplied, which is what both
+     companies' brand guidelines require — no recolouring, no cropping, no
+     putting their mark inside a button of our own. */
+  /* Both assets are edge-to-edge with no baked-in padding (Apple 119.66x40,
+     Google 478x142), so equal CSS height is all it takes to line them up.
+     Widths differ slightly because the aspect ratios do — that is correct, not
+     a bug to squash. */
+  .store-badge{display:inline-flex;align-items:center;text-decoration:none}
+  .store-badge img{display:block;width:auto;height:52px}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
   .hero-note{margin-top:18px;color:var(--muted2);font-size:13px;display:flex;align-items:center;gap:8px}
   .hero-note .dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
@@ -383,6 +399,16 @@ footer .logo-img{height:22px;width:120px}
 @media(max-width:520px){.globe-wrap{transform:scale(.78)}}
 
 </style>
+<script>
+/* If a badge image is missing, fall back to the old text button rather than
+   leaving a broken-image icon where the download link should be. Defined in
+   the head because onerror fires while the page is still parsing. */
+function badgeFallback(img){
+  var a = img.parentNode;
+  a.className = 'store-btn';
+  a.textContent = img.alt;
+}
+</script>
 </head>
 <body>
 
@@ -396,7 +422,7 @@ footer .logo-img{height:22px;width:120px}
       <a href="#local">Local Play</a>
       <a href="#leagues">Leagues</a>
     </div>
-    <a href="https://waitlist.kickoffsocialapp.co.uk" class="btn btn-primary nav-cta">JOIN WAITLIST</a>
+    <a href="#waitlist" class="btn btn-primary nav-cta">DOWNLOAD</a>
   </div>
 </nav>
 
@@ -407,7 +433,15 @@ footer .logo-img{height:22px;width:120px}
     <div class="reveal hero-copy">
       
       <h1><span class="pre">The Home of</span><br><span class="hl">Social<br class="mbr"> <span class="tac">Football</span></span></h1>
-      <p class="lead launch-line">Launching in August</p>
+      <p class="lead launch-line">Now available on the App Store and Google Play</p>
+      <div class="store-links">
+        <a class="store-badge badge-apple" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808" aria-label="Download KickOff on the App Store">
+          <img src="appstore-badge.svg" alt="Download on the App Store" onerror="badgeFallback(this)">
+        </a>
+        <a class="store-badge badge-google" href="https://play.google.com/store/apps/details?id=uk.co.kickoffsocialapp.app" aria-label="Get KickOff on Google Play">
+          <img src="googleplay-badge.png" alt="Get it on Google Play" onerror="badgeFallback(this)">
+        </a>
+      </div>
     </div>
     </div>
 
@@ -572,7 +606,14 @@ footer .logo-img{height:22px;width:120px}
   <div class="cta-in reveal">
     <h3 class="shout"><span class="line">What you</span><span class="line line2">waiting <span class="tac">for?</span></span></h3>
     <p>Get your starting rating</p>
-    <a href="https://waitlist.kickoffsocialapp.co.uk" class="btn btn-primary">Join the waitlist</a>
+    <div class="store-links" style="margin-top:26px">
+      <a class="store-badge badge-apple" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808" aria-label="Download KickOff on the App Store">
+        <img src="appstore-badge.svg" alt="Download on the App Store" onerror="badgeFallback(this)">
+      </a>
+      <a class="store-badge badge-google" href="https://play.google.com/store/apps/details?id=uk.co.kickoffsocialapp.app" aria-label="Get KickOff on Google Play">
+        <img src="googleplay-badge.png" alt="Get it on Google Play" onerror="badgeFallback(this)">
+      </a>
+    </div>
   </div>
 </div>
 
@@ -582,7 +623,8 @@ footer .logo-img{height:22px;width:120px}
     <div class="foot-grid">
       <div class="foot-links">
         <a href="#ratings">Ratings</a>
-        <a href="https://waitlist.kickoffsocialapp.co.uk">Join the waitlist</a>
+        <a href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808">App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=uk.co.kickoffsocialapp.app">Google Play</a>
         <a href="/privacy.html">Privacy</a>
         <a href="/terms.html">Terms</a>
       </div>
