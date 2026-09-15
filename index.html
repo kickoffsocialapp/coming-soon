@@ -408,6 +408,58 @@ function badgeFallback(img){
   a.className = 'store-btn';
   a.textContent = img.alt;
 }
+
+/* TikTok's in-app browser refuses the hand-off from an https://apps.apple.com
+   link to the App Store app, which surfaces as "action can't be completed".
+   Safari and Instagram's browser do it fine, and Google Play links are
+   unaffected because on iOS they are only a web page, with no hand-off to
+   block.
+
+   itms-apps:// is handled by iOS itself rather than by the page, and usually
+   survives where the https link does not. If it is blocked too, the timer
+   falls back to the https link, which at worst shows the App Store web page
+   instead of an error.
+
+   The visibility listeners cancel that timer: when the hand-off DOES work the
+   page is backgrounded, and without this the fallback would fire on return and
+   bounce the user a second time. Non-iOS visitors never enter any of this. */
+function openAppStore(ev){
+  if (!/iPad|iPhone|iPod/.test(navigator.userAgent)) return true;
+  var https = 'https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808';
+  var scheme = 'itms-apps://apps.apple.com/gb/app/id6805612808';
+  var left = false;
+  function cancel(){ left = true; }
+  document.addEventListener('visibilitychange', cancel, {once: true});
+  window.addEventListener('pagehide', cancel, {once: true});
+  setTimeout(function(){
+    if (left) return;          /* hand-off worked, we are in the background */
+    appStoreHint();            /* it did not, so say what to do about it */
+    window.location.href = https;
+  }, 800);
+  window.location.href = scheme;
+  if (ev && ev.preventDefault) ev.preventDefault();
+  return false;
+}
+
+/* Shown only when the hand-off has already failed, so ordinary visitors never
+   see it. Behaviour-based rather than sniffing for TikTok in the user agent:
+   the list of in-app browsers changes constantly, but "the App Store did not
+   open" is the same signal whoever is at fault. */
+function appStoreHint(){
+  var el = document.getElementById('as-hint');
+  if (el) { el.style.display = 'block'; return; }
+  el = document.createElement('div');
+  el.id = 'as-hint';
+  el.style.cssText = 'margin:14px auto 0;max-width:420px;padding:12px 14px;'+
+    'border:1px solid #416244;border-radius:12px;background:#152713;color:#fff;'+
+    'font-size:13px;line-height:19px;text-align:center';
+  el.innerHTML = 'If the App Store did not open, this app\'s browser is blocking '+
+    'it. Tap the <b>&#8943;</b> menu at the top of the screen and choose '+
+    '<b>Open in browser</b>.';
+  var anchor = document.querySelector('.store-links');
+  if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor.nextSibling);
+  else document.body.appendChild(el);
+}
 </script>
 </head>
 <body>
@@ -435,7 +487,7 @@ function badgeFallback(img){
       <h1><span class="pre">The Home of</span><br><span class="hl">Social<br class="mbr"> <span class="tac">Football</span></span></h1>
       <p class="lead launch-line">Now available on the App Store and Google Play</p>
       <div class="store-links">
-        <a class="store-badge badge-apple" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808" aria-label="Download KickOff on the App Store">
+        <a class="store-badge badge-apple" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808" aria-label="Download KickOff on the App Store" onclick="return openAppStore(event)">
           <img src="appstore-badge.svg" alt="Download on the App Store" onerror="badgeFallback(this)">
         </a>
         <a class="store-badge badge-google" href="https://play.google.com/store/apps/details?id=uk.co.kickoffsocialapp.app" aria-label="Get KickOff on Google Play">
@@ -607,7 +659,7 @@ function badgeFallback(img){
     <h3 class="shout"><span class="line">What you</span><span class="line line2">waiting <span class="tac">for?</span></span></h3>
     <p>Get your starting rating</p>
     <div class="store-links" style="margin-top:26px">
-      <a class="store-badge badge-apple" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808" aria-label="Download KickOff on the App Store">
+      <a class="store-badge badge-apple" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808" aria-label="Download KickOff on the App Store" onclick="return openAppStore(event)">
         <img src="appstore-badge.svg" alt="Download on the App Store" onerror="badgeFallback(this)">
       </a>
       <a class="store-badge badge-google" href="https://play.google.com/store/apps/details?id=uk.co.kickoffsocialapp.app" aria-label="Get KickOff on Google Play">
@@ -623,7 +675,7 @@ function badgeFallback(img){
     <div class="foot-grid">
       <div class="foot-links">
         <a href="#ratings">Ratings</a>
-        <a href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808">App Store</a>
+        <a href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808" onclick="return openAppStore(event)">App Store</a>
         <a href="https://play.google.com/store/apps/details?id=uk.co.kickoffsocialapp.app">Google Play</a>
         <a href="/privacy.html">Privacy</a>
         <a href="/terms.html">Terms</a>
