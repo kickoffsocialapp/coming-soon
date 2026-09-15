@@ -19,6 +19,11 @@
   .hint{display:none;margin-top:20px;padding:14px 16px;background:#152713;
         border:1px solid #416244;border-radius:12px;font-size:14px;line-height:21px;color:#fff}
   .hint b{color:#fff}
+  /* Kept to a single line. nowrap alone would overflow the panel on a 320px
+     phone, so the size scales with the viewport and is clamped at both ends:
+     never bigger than the body text, never too small to read. */
+  #hint-where{display:block;white-space:nowrap;font-size:clamp(10px,3.2vw,14px);
+              margin-bottom:4px}
   .alt{margin-top:22px;font-size:13px;color:#9fb09b}
   .alt a{color:#9fb09b}
 </style>
@@ -39,7 +44,7 @@
   </a>
 
   <div class="hint" id="hint">
-    <span id="hint-where">The App Store won't open inside this app's browser.</span><br>
+    <span id="hint-where">The App Store won't open inside this app's browser.</span>
     Tap <b>&#8943;</b> at the top, then choose <b>Open in browser</b>.
   </div>
 
