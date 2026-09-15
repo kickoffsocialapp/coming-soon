@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get KickOff</title>
+<meta name="description" content="Download KickOff on the App Store or Google Play.">
+<meta name="color-scheme" content="dark">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#0F170B;color:#fff;
+       font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+       display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px 18px}
+  .wrap{width:100%;max-width:380px;text-align:center}
+  .logo{width:190px;height:37px;margin:0 auto 26px;display:block}
+  h1{font-size:19px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin:0 0 6px}
+  .sub{font-size:14px;line-height:21px;color:#c8d6c4;margin:0 0 26px}
+  .badge{display:block;margin:0 auto 12px;border:0;outline:none}
+  .badge img{display:block;height:48px;width:auto;margin:0 auto}
+  .hint{display:none;margin-top:20px;padding:14px 16px;background:#152713;
+        border:1px solid #416244;border-radius:12px;font-size:14px;line-height:21px}
+  .hint b{color:#4bff60}
+  .alt{margin-top:22px;font-size:13px;color:#9fb09b}
+  .alt a{color:#9fb09b}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <img class="logo" src="../kickoff-logo.png" alt="KICKOFF">
+
+  <h1 id="head">Get KickOff</h1>
+  <p class="sub" id="sub">Free on iPhone and Android.</p>
+
+  <a class="badge" id="ios" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808">
+    <img src="../appstore-badge.png" alt="Download on the App Store">
+  </a>
+
+  <a class="badge" id="android" href="https://play.google.com/store/apps/details?id=uk.co.kickoffsocialapp.app">
+    <img src="../googleplay-badge.png" alt="Get it on Google Play">
+  </a>
+
+  <div class="hint" id="hint">
+    The App Store won't open from inside this app's browser.<br>
+    Tap <b>&#8943;</b> at the top of the screen, choose <b>Open in browser</b>, then tap the badge again.
+  </div>
+
+  <p class="alt"><a href="https://www.kickoffsocialapp.co.uk">kickoffsocialapp.co.uk</a></p>
+
+</div>
+
+<script>
+/* One link for every platform, so the same URL can sit in a TikTok bio, a
+   Linktree row and an Instagram profile without anyone having to pick.
+
+   The iOS half is the whole reason this page exists. TikTok's in-app browser
+   refuses to hand off from an https://apps.apple.com link to the App Store app
+   and shows "action can't be completed". itms-apps:// is handled by iOS itself
+   rather than by the page, so it usually survives where the https link does
+   not.
+
+   Deliberately NOT an automatic redirect on load: iOS is far more willing to
+   follow a scheme handover that came from a real tap than one fired by a
+   script the moment a page opened. Losing a tap is worth the reliability. */
+(function(){
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua);
+  var isAndroid = /Android/.test(ua);
+
+  if (isIOS) {
+    document.getElementById('sub').textContent = 'Free on the App Store.';
+    document.getElementById('android').style.opacity = '.45';
+  } else if (isAndroid) {
+    document.getElementById('sub').textContent = 'Free on Google Play.';
+    document.getElementById('ios').style.opacity = '.45';
+  }
+
+  if (!isIOS) return;   /* Android and desktop need none of what follows */
+
+  document.getElementById('ios').addEventListener('click', function(ev){
+    ev.preventDefault();
+    var https  = 'https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808';
+    var scheme = 'itms-apps://apps.apple.com/gb/app/id6805612808';
+    var left = false;
+    function cancel(){ left = true; }
+    /* When the hand-off works the page is backgrounded, and without these the
+       fallback would fire on return and bounce the user a second time. */
+    document.addEventListener('visibilitychange', cancel, {once:true});
+    window.addEventListener('pagehide', cancel, {once:true});
+
+    setTimeout(function(){
+      if (left) return;
+      document.getElementById('hint').style.display = 'block';
+      window.location.href = https;
+    }, 900);
+
+    window.location.href = scheme;
+  });
+})();
+</script>
+</body>
+</html>
