@@ -13,8 +13,7 @@
        display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px 18px}
   .wrap{width:100%;max-width:380px;text-align:center}
   .logo{width:190px;height:37px;margin:0 auto 26px;display:block}
-  h1{font-size:19px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin:0 0 6px}
-  .sub{font-size:14px;line-height:21px;color:#c8d6c4;margin:0 0 26px}
+  h1{font-size:19px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin:0 0 24px}
   .badge{display:block;margin:0 auto 12px;border:0;outline:none}
   .badge img{display:block;height:48px;width:auto;margin:0 auto}
   .hint{display:none;margin-top:20px;padding:14px 16px;background:#152713;
@@ -29,8 +28,7 @@
 
   <img class="logo" src="../kickoff-logo.png" alt="KICKOFF">
 
-  <h1 id="head">Get KickOff</h1>
-  <p class="sub" id="sub">Free on iPhone and Android.</p>
+  <h1 id="head">Now available on</h1>
 
   <a class="badge" id="ios" href="https://apps.apple.com/gb/app/kickoff-social-football-app/id6805612808">
     <img src="../appstore-badge.png" alt="Download on the App Store">
@@ -67,11 +65,11 @@
   var isIOS = /iPad|iPhone|iPod/.test(ua);
   var isAndroid = /Android/.test(ua);
 
+  /* Dim the store they cannot use rather than hiding it, so the page still
+     reads as "both" and a wrong guess about the device is never a dead end. */
   if (isIOS) {
-    document.getElementById('sub').textContent = 'Free on the App Store.';
     document.getElementById('android').style.opacity = '.45';
   } else if (isAndroid) {
-    document.getElementById('sub').textContent = 'Free on Google Play.';
     document.getElementById('ios').style.opacity = '.45';
   }
 
